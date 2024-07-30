@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Splash Screen</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #72EDF2 10%, #5151E5 100%);
+      overflow: hidden;
+    }
+
+    .splash-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 30px 50px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      border: 1px solid #ddd;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .splash-container img {
+      width: 100px;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: scale(0.9);
+      animation: fadeInScale 2s ease-out forwards;
+    }
+
+    .splash-container h1 {
+      margin: 0;
+      font-size: 26px;
+      color: #333;
+      animation: fadeIn 1.5s 0.5s forwards;
+      opacity: 0;
+    }
+
+    .splash-container p {
+      margin-top: 10px;
+      font-size: 20px;
+      color: #555;
+      animation: fadeIn 2s 1s forwards;
+      opacity: 0;
+    }
+
+    .splash-container .highlight {
+      color: #4B0082;
+      font-weight: bold;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Desain Responsif */
+    @media (max-width: 600px) {
+      .splash-container {
+        width: 90%;
+        padding: 20px 30px;
+      }
+
+      .splash-container h1 {
+        font-size: 22px;
+      }
+
+      .splash-container p {
+        font-size: 16px;
+      }
+
+      .splash-container img {
+        width: 80px;
+      }
+    }
+  </style>
+  <script>
+    // Fungsi untuk mengarahkan ke halaman utama setelah 4 detik
+    setTimeout(function() {
+      window.location.href = 'homescreen.html'; // Ganti dengan URL halaman utama Anda
+    }, 4000); // Waktu dalam milidetik (4000ms = 4 detik)
+  </script>
+</head>
+<body>
+  <div class="splash-container">
+    <img src="Img/logo.png" alt="Logo">
+    <h1>Selamat datang di <span class="highlight">Auditing System</span></h1>
+    <p>GMAHK - <span class="highlight">DKMMU</span></p>
+  </div>
+</body>
+</html>

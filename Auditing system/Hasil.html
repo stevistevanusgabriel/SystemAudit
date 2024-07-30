@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hasil Laporan</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      height: 100%;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background-color: #2E4E6A;
+      color: #FFFFFF;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+    }
+
+    .header .back-button {
+      background-color: #FF4C4C;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #FFFFFF;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .header .back-button:hover {
+      background-color: #E43C3C;
+    }
+
+    .content {
+      padding: 20px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .report-item {
+      background-color: #FFFFFF;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .report-details {
+      flex-grow: 1;
+    }
+
+    .report-details h3 {
+      margin-top: 0;
+    }
+
+    .report-details p {
+      margin: 5px 0;
+    }
+
+    .report-actions {
+      text-align: right;
+    }
+
+    .report-item button {
+      background-color: #007bff;
+      border: none;
+      padding: 5px 10px;
+      color: #FFFFFF;
+      cursor: pointer;
+      border-radius: 3px;
+      margin-right: 5px;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    .report-item button.delete {
+      background-color: #FF4C4C;
+    }
+
+    .report-item button.edit {
+      background-color: #28a745;
+    }
+
+    .report-item button.preview {
+      background-color: #ffc107;
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+      .header .back-button {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+
+      .report-item button {
+        font-size: 12px;
+        padding: 4px 8px;
+      }
+
+      .report-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .report-actions {
+        text-align: left;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Hasil Laporan</h1>
+    <button class="back-button" onclick="window.location.href='HomeScreen.html'">Kembali</button>
+  </div>
+  <div class="content" id="reports-list">
+    <!-- Daftar laporan akan ditampilkan di sini -->
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const reportsList = document.getElementById('reports-list');
+  
+      let savedReports = JSON.parse(localStorage.getItem('savedReports')) || [];
+  
+      function renderReports() {
+        reportsList.innerHTML = '';
+        if (savedReports.length === 0) {
+          reportsList.innerHTML = '<p>Belum ada laporan yang disimpan.</p>';
+          return;
+        }
+  
+        savedReports.forEach((report, index) => {
+          // Jika timestamp tidak ada, tambahkan sekarang (untuk laporan lama yang mungkin belum punya)
+          if (!report.timestamp) {
+            report.timestamp = new Date().toISOString();
+            localStorage.setItem('savedReports', JSON.stringify(savedReports));
+          }
+
+          const reportItem = document.createElement('div');
+          reportItem.classList.add('report-item');
+          
+          // Buat elemen HTML untuk laporan
+          reportItem.innerHTML = `
+            <div class="report-details">
+              <h3>Laporan ${index + 1}</h3>
+              <p><strong>Jemaat:</strong> ${report.jemaat}</p>
+              <p><strong>Tanggal Tersimpan:</strong> ${new Date(report.timestamp).toLocaleString()}</p>
+            </div>
+            <div class="report-actions">
+              <button class="edit">Edit</button>
+              <button class="delete">Hapus</button>
+              <button class="preview">Tampilkan Laporan</button>
+            </div>
+          `;
+          
+          // Tambahkan event listener untuk tombol Edit
+          reportItem.querySelector('.edit').addEventListener('click', () => {
+            editReport(index);
+          });
+  
+          // Tambahkan event listener untuk tombol Hapus
+          reportItem.querySelector('.delete').addEventListener('click', () => {
+            deleteReport(index);
+          });
+
+          // Tambahkan event listener untuk tombol Tampilkan Laporan
+          reportItem.querySelector('.preview').addEventListener('click', () => {
+            previewReport(index);
+          });
+  
+          reportsList.appendChild(reportItem);
+        });
+      }
+  
+      function deleteReport(index) {
+        savedReports.splice(index, 1);
+        localStorage.setItem('savedReports', JSON.stringify(savedReports));
+        renderReports();
+      }
+  
+      function editReport(index) {
+        const report = savedReports[index];
+        if (report) {
+          localStorage.setItem('editReportIndex', index);
+          localStorage.setItem('editReportData', JSON.stringify(report));
+          window.location.href = 'Edit.html'; // Halaman edit laporan
+        }
+      }
+
+      function previewReport(index) {
+        const report = savedReports[index];
+        if (report) {
+          const previewContent = `
+            <div style="padding: 20px; font-family: Arial, sans-serif;">
+              <h2>Laporan</h2>
+              <p><strong>Jemaat:</strong> ${report.jemaat}</p>
+              <p><strong>Isi Laporan:</strong></p>
+              <p>${report.content}</p>
+              <h3>Gambar:</h3>
+              ${report.images.map(imgSrc => `<img src="${imgSrc}" style="max-width:100%;max-height:150px;">`).join('')}
+            </div>
+          `;
+          const newWindow = window.open('', '_blank');
+          newWindow.document.write('<html><head><title>Laporan</title></head><body>');
+          newWindow.document.write(previewContent);
+          newWindow.document.write('</body></html>');
+          newWindow.document.close();
+        }
+      }
+  
+      renderReports();
+    });
+  </script>
+</body>
+</html>

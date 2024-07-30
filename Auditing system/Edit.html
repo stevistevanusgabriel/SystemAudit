@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Laporan</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      height: 100%;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background-color: #2E4E6A;
+      color: #FFFFFF;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+    }
+
+    .header .back-button {
+      background-color: #FF4C4C;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #FFFFFF;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .header .back-button:hover {
+      background-color: #E43C3C;
+    }
+
+    .content {
+      padding: 20px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .report-section {
+      margin-top: 20px;
+    }
+
+    .report-section select, .report-section textarea, .report-section input[type="file"] {
+      width: 100%;
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+      flex: 1;
+      min-width: 100px;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    .pdf-button {
+      background-color: #f0ad4e;
+    }
+
+    .pdf-button:hover {
+      background-color: #ec971f;
+    }
+
+    .preview-button {
+      background-color: #5bc0de;
+    }
+
+    .preview-button:hover {
+      background-color: #31b0d5;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Edit Laporan</h1>
+    <nav>
+      <button class="back-button" onclick="window.location.href='Hasil.html'">Kembali</button>
+    </nav>
+  </div>
+  <div class="content">
+    <div class="report-section">
+      <h2>Edit Laporan</h2>
+      <label for="jemaat-select">Pilih Jemaat:</label>
+      <select id="jemaat-select">
+        <option value="">--Pilih Jemaat--</option>
+        <option value="Jemaat A">Jemaat A</option>
+        <option value="Jemaat B">Jemaat B</option>
+        <option value="Jemaat C">Jemaat C</option>
+      </select>
+      <textarea id="report-content" placeholder="Tulis laporan Anda di sini..."></textarea>
+      <input type="file" id="image-upload" multiple accept="image/*" onchange="previewImages()">
+      <div class="uploaded-images" id="uploaded-images"></div>
+      <div class="button-container">
+        <button class="button save-button" onclick="saveReport()">Simpan Perubahan</button>
+        <button class="button pdf-button" onclick="saveReportAsPDF()">Simpan sebagai PDF</button>
+        <button class="button preview-button" onclick="previewReport()">Tampilkan Laporan</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const jemaatSelect = document.getElementById('jemaat-select');
+      const reportContent = document.getElementById('report-content');
+      const uploadedImages = document.getElementById('uploaded-images');
+
+      const editIndex = localStorage.getItem('editReportIndex');
+      const editData = JSON.parse(localStorage.getItem('editReportData'));
+
+      if (editData) {
+        jemaatSelect.value = editData.jemaat;
+        reportContent.value = editData.content;
+
+        editData.images.forEach(imgSrc => {
+          const img = document.createElement('img');
+          img.src = imgSrc;
+          img.style.maxWidth = '100%';
+          img.style.maxHeight = '150px';
+          img.style.marginBottom = '10px';
+          uploadedImages.appendChild(img);
+        });
+      }
+
+      window.previewImages = function() {
+        const files = document.getElementById('image-upload').files;
+        uploadedImages.innerHTML = '';
+
+        Array.from(files).forEach(file => {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.maxWidth = '100%';
+            img.style.maxHeight = '150px';
+            img.style.marginBottom = '10px';
+            uploadedImages.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+      };
+
+      window.saveReport = function() {
+        const jemaat = jemaatSelect.value;
+        const content = reportContent.value;
+        const images = Array.from(uploadedImages.getElementsByTagName('img')).map(img => img.src);
+
+        if (editIndex !== null) {
+          let savedReports = JSON.parse(localStorage.getItem('savedReports')) || [];
+          savedReports[editIndex] = { jemaat, content, images };
+          localStorage.setItem('savedReports', JSON.stringify(savedReports));
+        }
+
+        localStorage.removeItem('editReportIndex');
+        localStorage.removeItem('editReportData');
+        window.location.href = 'Hasil.html';
+      };
+
+      window.saveReportAsPDF = function() {
+        const jemaat = jemaatSelect.value;
+        const content = reportContent.value;
+        const images = Array.from(uploadedImages.getElementsByTagName('img')).map(img => img.src);
+
+        const pdfContent = `
+          <div style="padding: 20px; font-family: Arial, sans-serif;">
+            <h2>Edit Laporan</h2>
+            <p><strong>Jemaat:</strong> ${jemaat}</p>
+            <p><strong>Isi Laporan:</strong></p>
+            <p>${content}</p>
+            <h3>Gambar:</h3>
+            ${images.map(imgSrc => `<img src="${imgSrc}" style="max-width:100%;max-height:150px;">`).join('')}
+          </div>
+        `;
+        const pdf = document.createElement('div');
+        pdf.innerHTML = pdfContent;
+
+        html2pdf().from(pdf).save('laporan_edit.pdf');
+      };
+
+      window.previewReport = function() {
+        const jemaat = jemaatSelect.value;
+        const content = reportContent.value;
+        const images = Array.from(uploadedImages.getElementsByTagName('img')).map(img => img.src);
+
+        const previewContent = `
+          <div style="padding: 20px; font-family: Arial, sans-serif;">
+            <h2>Laporan</h2>
+            <p><strong>Jemaat:</strong> ${jemaat}</p>
+            <p><strong>Isi Laporan:</strong></p>
+            <p>${content}</p>
+            <h3>Gambar:</h3>
+            ${images.map(imgSrc => `<img src="${imgSrc}" style="max-width:100%;max-height:150px;">`).join('')}
+          </div>
+        `;
+
+        const newWindow = window.open('', '_blank');
+        newWindow.document.write('<html><head><title>Laporan</title></head><body>');
+        newWindow.document.write(previewContent);
+        newWindow.document.write('</body></html>');
+        newWindow.document.close();
+      };
+    });
+  </script>
+</body>
+</html>

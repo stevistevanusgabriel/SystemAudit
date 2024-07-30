@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden; /* Pastikan konten tidak meluap keluar layar */
+      background: linear-gradient(135deg, #72EDF2 10%, #5151E5 100%);
+    }
+
+    .container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      z-index: 1; /* Pastikan berada di depan animasi kalimat */
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .container img {
+      width: 80px;
+      margin-bottom: 20px;
+    }
+
+    .container h1 {
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    .form-group input:focus {
+      border-color: #5151E5;
+      outline: none;
+    }
+
+    .button-group {
+      margin-top: 30px;
+    }
+
+    .button-group button {
+      width: 100%;
+      padding: 15px;
+      background-color: #4B0082;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .button-group button:hover {
+      background-color: #551A8B;
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    .login-link {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .login-link a {
+      color: #1E90FF;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .animated-text {
+      position: absolute;
+      bottom: 10px; /* Jarak dari bawah halaman */
+      left: 100%;
+      white-space: nowrap;
+      font-size: 18px;
+      font-weight: bold;
+      color: rgba(12, 1, 1, 0.5); /* Warna kalimat dengan transparansi */
+      animation: slide 15s linear infinite; /* Animasi berjalan dengan kecepatan konstan */
+    }
+
+    @keyframes slide {
+      0% {
+        left: 100%;
+      }
+      100% {
+        left: -100%;
+      }
+    }
+  </style>
+  <script>
+    function handleSignIn() {
+      // Validasi sederhana untuk memastikan input tidak kosong
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      if (username && password) {
+        // Arahkan ke halaman splash screen
+        window.location.href = 'splashscreen.html'; // Pastikan splashscreen.html ada di lokasi yang sama
+      } else {
+        alert('Mohon isi username dan password.');
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="animated-text">Selamat Datang di Sistem Audit <b><u>GMAHK DKMMU</u></b>. Untuk Masuk Silahkan Masukan Username dan Password Anda.</div>
+  <div class="container">
+    <img src="Img/logo.png" alt="Logo">
+    <h1>Sign In</h1>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Masukkan username Anda" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Masukkan password Anda" required>
+    </div>
+    <div class="button-group">
+      <button onclick="handleSignIn()">SIGN IN</button>
+    </div>
+    <div class="login-link">
+      Belum memiliki akun? <a href="SignUp.html">Sign up akun.</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Laporan</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .container h1 {
+      margin-top: 0;
+    }
+
+    .container img {
+      max-width: 100%;
+      max-height: 300px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="report-detail">
+    <!-- Detail laporan akan ditambahkan di sini -->
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const reportDetailContainer = document.getElementById('report-detail');
+      const report = JSON.parse(localStorage.getItem('reportDetail'));
+
+      if (report) {
+        reportDetailContainer.innerHTML = `
+          <h1>Detail Laporan</h1>
+          <p><strong>Jemaat:</strong> ${report.jemaat}</p>
+          <p><strong>Isi Laporan:</strong></p>
+          <p>${report.content}</p>
+          <h3>Gambar:</h3>
+          ${report.images.map(imgSrc => `<img src="${imgSrc}" alt="Gambar laporan">`).join('')}
+        `;
+      } else {
+        reportDetailContainer.innerHTML = '<p>Detail laporan tidak ditemukan.</p>';
+      }
+    });
+  </script>
+</body>
+</html>

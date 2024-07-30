@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      height: 100%;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background-color: #2E4E6A;
+      color: #FFFFFF;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+    }
+
+    .header .back-button {
+      background-color: #FF4C4C;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #FFFFFF;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .header .back-button:hover {
+      background-color: #E43C3C;
+    }
+
+    .content {
+      padding: 20px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .report-section {
+      margin-top: 20px;
+    }
+
+    .report-section select, .report-section textarea, .report-section input[type="file"] {
+      width: 100%;
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .show-button, .storage-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    .show-button:hover, .storage-button:hover {
+      opacity: 0.8;
+    }
+
+    .saved-report {
+      margin-top: 20px;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+    }
+
+    .saved-report h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #2E4E6A;
+    }
+
+    .saved-report p {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .uploaded-images img {
+      max-width: 100%;
+      max-height: 150px;
+      margin-bottom: 10px;
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+      .header .back-button {
+        font-size: 14px;
+        padding: 8px 16px;
+        top: 10px;
+        right: 10px;
+      }
+
+      .report-section select, .report-section textarea, .report-section input[type="file"] {
+        font-size: 14px;
+      }
+
+      .show-button, .storage-button {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Audit Laporan</h1>
+    <button class="back-button" onclick="handleExit()">Kembali</button>
+  </div>
+  <div class="content">
+    <div class="report-section">
+      <h2>Buat Laporan</h2>
+      <label for="jemaat-select">Pilih Jemaat:</label>
+      <select id="jemaat-select">
+        <option value="">--Pilih Jemaat--</option>
+        <option value="Jemaat A">Jemaat A</option>
+        <option value="Jemaat B">Jemaat B</option>
+        <option value="Jemaat C">Jemaat C</option>
+      </select>
+      <textarea id="report-content" placeholder="Tulis laporan Anda di sini..." rows="10"></textarea>
+      <input type="file" id="image-upload" multiple accept="image/*" onchange="previewImages()">
+      <div class="uploaded-images" id="uploaded-images"></div>
+      <button class="show-button" onclick="displayReport()">Tampilkan</button>
+      <button class="storage-button" onclick="saveReportToStorage()">Simpan Hasil</button>
+    </div>
+    <div class="saved-report" id="saved-report">
+      <h2>Laporan Tersimpan:</h2>
+      <p id="saved-jemaat"></p>
+      <p id="saved-report-content"></p>
+      <div id="saved-report-images"></div>
+    </div>
+  </div>
+
+  <script>
+    function handleExit() {
+      window.location.href = 'HomeScreen.html'; // halaman homescreen Anda
+    }
+
+    function previewImages() {
+      const uploadedImages = document.getElementById('uploaded-images');
+      uploadedImages.innerHTML = '';
+      const files = document.getElementById('image-upload').files;
+
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          uploadedImages.appendChild(img);
+        };
+        reader.readAsDataURL(files[i]);
+      }
+    }
+
+    function displayReport() {
+      const jemaat = document.getElementById('jemaat-select').value;
+      const reportContent = document.getElementById('report-content').value;
+
+      document.getElementById('saved-jemaat').innerText = `Jemaat: ${jemaat}`;
+      document.getElementById('saved-report-content').innerText = reportContent;
+
+      const uploadedImages = document.getElementById('uploaded-images').getElementsByTagName('img');
+      const savedReportImages = document.getElementById('saved-report-images');
+      savedReportImages.innerHTML = '';
+
+      for (let i = 0; i < uploadedImages.length; i++) {
+        const img = document.createElement('img');
+        img.src = uploadedImages[i].src;
+        img.style.maxWidth = '100%';
+        img.style.maxHeight = '150px';
+        img.style.marginBottom = '10px';
+        savedReportImages.appendChild(img);
+      }
+    }
+
+    function saveReportToStorage() {
+      const jemaat = document.getElementById('jemaat-select').value;
+      const reportContent = document.getElementById('report-content').value;
+      const uploadedImages = document.getElementById('uploaded-images').getElementsByTagName('img');
+
+      const report = {
+        jemaat: jemaat,
+        content: reportContent,
+        images: Array.from(uploadedImages).map(img => img.src)
+      };
+
+      let savedReports = JSON.parse(localStorage.getItem('savedReports')) || [];
+      savedReports.push(report);
+      localStorage.setItem('savedReports', JSON.stringify(savedReports));
+
+      window.location.href = 'Hasil.html';
+    }
+  </script>
+</body>
+</html>

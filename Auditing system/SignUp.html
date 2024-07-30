@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #72EDF2 10%, #5151E5 100%);
+    }
+
+    .container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .container img {
+      width: 80px;
+      margin-bottom: 20px;
+    }
+
+    .container h1 {
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    .input-group input:focus {
+      border-color: #5151E5;
+      outline: none;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .button-group button {
+      width: 48%;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      color: white;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .button-group .auditing {
+      background-color: #2E8B57;
+    }
+
+    .button-group .bendahara {
+      background-color: #8B4513;
+    }
+
+    .button-group button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    .create-account {
+      background-color: #4B0082;
+      color: white;
+      padding: 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 18px;
+      margin-top: 20px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .create-account:hover {
+      background-color: #551A8B;
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    .login-link {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .login-link a {
+      color: #1E90FF;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="Img/logo.png" alt="Logo">
+    <h1>Sign Up</h1>
+    <div class="input-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Masukkan username Anda" required>
+    </div>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Masukkan password Anda" required>
+    </div>
+    <div class="input-group">
+      <label>Pilih Tipe Pengguna:</label>
+    </div>
+    <div class="button-group">
+      <button class="auditing">Auditing</button>
+      <button class="bendahara">Bendahara Jemaat</button>
+    </div>
+    <button class="create-account">Create an account</button>
+    <div class="login-link">
+      Sudah memiliki akun? <a href="SignIn.html">Sign in akun.</a>
+    </div>
+  </div>
+</body>
+</html>
